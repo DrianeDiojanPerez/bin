@@ -1,0 +1,57 @@
+#!/bin/bash
+if [ ! -z "$1" ] && [ ! -z "$2" ] && [ -z "$3" ] && [[ $2 == *".net"* ]]
+then
+	echo ""
+	echo "I am about to create a directory structure named $1."
+	read -p "Do you want me to continue? [yes/no] " option
+	while [ "$option" != "yes" ] && [ "$option" != "no" ]
+	do
+		echo ""
+		echo "Invalid option '$option', the Valid options are 'yes' and, 'no'."
+		echo ""
+		echo "I am about to create a directory structure named $1."
+		read -p "Do you want me to continue? [yes/no] " option
+	done
+	
+	if [ "$option" == "yes" ]
+	then
+		echo ""
+		echo "Create directory structure..."
+		echo ""
+		mkdir "$HOME/$1"
+		mkdir "$HOME/$1/cmd"
+		mkdir "$HOME/$1/internals"
+		mkdir "$HOME/$1/migrations"
+		mkdir "$HOME/$1/remote"
+		mkdir "$HOME/$1/cmd/api"
+		touch "$HOME/$1/cmd/api/main.go"
+		echo '// File: cmd/api/main.go
+package main
+import "fmt"
+func main() {
+fmt.Println("Hello world!")
+}'>"$HOME/$1/cmd/api/main.go"
+		cd "$HOME/$1"
+		go mod init "$1.$2"
+		echo ""
+		echo "I have created a *main.go* file for you to test the directory structure."
+       		echo "Type *go run ./cmd/api* at the root directory of your project to test your project."
+       		echo "Thank you."
+
+		echo ""
+
+		
+	elif [ "$option" == "no" ]
+	then
+		echo ""
+		echo "Abort."
+		echo ""		
+	fi
+else
+	echo ""
+	echo "You need to provide two arguments for this script to work."
+	echo "Usage: make-go-dir <root directory name> <identifier name>"
+	echo "Make sure the identifier name has a '.net' at the end."
+	echo ""
+fi
+
